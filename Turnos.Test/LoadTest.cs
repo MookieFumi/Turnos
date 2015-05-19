@@ -34,14 +34,10 @@ namespace Turnos.Test
             _stopwatch.Start();
         }
 
-        [TearDown]
-        public void TearDown()
-        {
-        }
-
         [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
+            _context.Dispose();
         }
 
         [Test(Description = "Cargamos del contexto y mediante Lazy Loading carga lo que va necesitando")]
@@ -60,7 +56,7 @@ namespace Turnos.Test
             }
         }
 
-        [Test (Description = "Cargamos del contexto mediante una proyección a un DTO")]
+        [Test (Description = "Cargamos del contexto con una proyección a un DTO (Una sóla consulta)")]
         public void LoadDataWithDTO()
         {
             var usuario = GetUsuarioDTO(_context);
