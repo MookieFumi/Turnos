@@ -11,7 +11,7 @@ using Turnos.Test.DTO;
 
 namespace Turnos.Test
 {
-    public class LoadTest
+    public class GetUsuarioTest
     {
         private Stopwatch _stopwatch;
         private Random _random;
@@ -40,7 +40,7 @@ namespace Turnos.Test
             _context.Dispose();
         }
 
-        [Test(Description = "Cargamos del contexto y mediante Lazy Loading carga lo que va necesitando")]
+        [Test(Description = "Cargamos del contexto y con Lazy Loading carga lo que va necesitando")]
         public void LoadData()
         {
             var usuario = GetUsuario(_context);
@@ -56,7 +56,7 @@ namespace Turnos.Test
             }
         }
 
-        [Test (Description = "Cargamos del contexto con una proyección a un DTO (Una sóla consulta)")]
+        [Test(Description = "Cargamos del contexto con una proyección a un DTO (Una sóla consulta)")]
         public void LoadDataWithDTO()
         {
             var usuario = GetUsuarioDTO(_context);
@@ -87,11 +87,13 @@ namespace Turnos.Test
 
         private void SetAutoMapperMaps()
         {
-            Mapper.CreateMap<Usuario, TurnoDeUsuarioDTO>();
-            Mapper.CreateMap<UsuarioTurno, TurnoDeUsuarioDTO.TurnoDTO>();
+            Mapper.CreateMap<Usuario, TurnoDeUsuarioDTO>()
+                .ReverseMap();
+            Mapper.CreateMap<UsuarioTurno, TurnoDeUsuarioDTO.TurnoDTO>()
+                .ReverseMap();
             Mapper.CreateMap<UsuarioTurnoDia, TurnoDeUsuarioDTO.DiaDTO>()
-                .ForMember(dst => dst.PrimerDiaSemana,
-                    opt => opt.MapFrom(src => src.UsuarioTurno.Usuario.Empresa.PrimerDiaSemana));
+                .ForMember(dst => dst.PrimerDiaSemana, opt => opt.MapFrom(src => src.UsuarioTurno.Usuario.Empresa.PrimerDiaSemana))
+                .ReverseMap();
         }
 
         private void SeedData(DPContext context)
@@ -107,7 +109,7 @@ namespace Turnos.Test
                 for (var semana = 1; semana <= _random.Next(1, 8); semana++)
                 {
                     const int daysNumber = 28;
-                    usuario.AddTurno(dateTime.AddDays(daysNumber).Date, semana, "Turno Semana");
+                    usuario.AddTurno(dateTime.AddDays(daysNumber).Date, semana, "Turno Semanal");
                 }
             }
 

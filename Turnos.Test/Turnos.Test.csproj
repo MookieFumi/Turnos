@@ -70,7 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LoadTest.cs" />
+    <Compile Include="GetUsuarioTest.cs" />
     <Compile Include="DTO\TurnoDeUsuarioDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

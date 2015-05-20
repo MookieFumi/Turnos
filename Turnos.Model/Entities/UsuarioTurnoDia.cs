@@ -6,6 +6,13 @@ namespace Turnos.Model.Entities
 {
     public class UsuarioTurnoDia
     {
+        public UsuarioTurnoDia(int dia, Turno turno, bool trabaja)
+        {
+            Dia = dia;
+            Turno = turno;
+            Trabaja = trabaja;
+        }
+
         public int UsuarioTurnoId { get; set; }
         public virtual UsuarioTurno UsuarioTurno { get; set; }
 

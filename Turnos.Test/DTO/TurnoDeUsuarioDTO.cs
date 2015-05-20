@@ -8,6 +8,7 @@ namespace Turnos.Test.DTO
 {
     internal class TurnoDeUsuarioDTO
     {
+        public int EmpresaId { get; set; }
         public string Nombre { get; set; }
         public ICollection<TurnoDTO> Turnos { get; set; }
 

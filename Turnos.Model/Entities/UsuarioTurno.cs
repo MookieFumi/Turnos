@@ -5,8 +5,11 @@ namespace Turnos.Model.Entities
 {
     public class UsuarioTurno
     {
-        public UsuarioTurno()
+        public UsuarioTurno(DateTime fechaDesde, string nombre, int numeroSemana)
         {
+            FechaDesde = fechaDesde;
+            Nombre = nombre;
+            NumeroSemana = numeroSemana;
             Dias = new HashSet<UsuarioTurnoDia>();
         }
 
