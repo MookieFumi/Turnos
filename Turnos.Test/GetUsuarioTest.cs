@@ -20,11 +20,14 @@ namespace Turnos.Test
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
+            SetAutoMapperMaps();
+
             _random = new Random();
             _context = new DPContext();
+
             DeleteData(_context);
             SeedData(_context);
-            SetAutoMapperMaps();
+            _context.SaveChanges();
         }
 
         [SetUp]
@@ -40,12 +43,17 @@ namespace Turnos.Test
             _context.Dispose();
         }
 
-        [Test(Description = "Cargamos del contexto y con Lazy Loading carga lo que va necesitando")]
+        [Test]
         public void LoadData()
         {
-            var usuario = GetUsuario(_context);
+            var usuario = GetUsuario();
             Debug.WriteLine(usuario.Nombre + "\n");
-            foreach (var turno in usuario.Turnos.OrderByDescending(p => p.FechaDesde).ThenBy(p => p.NumeroSemana))
+            var turnos = from t in usuario.Turnos
+                         orderby t.FechaDesde descending
+                         orderby t.NumeroSemana
+                         select t;
+            //var turnos = usuario.Turnos.OrderByDescending(p => p.FechaDesde).ThenBy(p => p.NumeroSemana);
+            foreach (var turno in turnos)
             {
                 Debug.WriteLine(turno.ToString());
                 foreach (var dia in turno.Dias)
@@ -56,12 +64,15 @@ namespace Turnos.Test
             }
         }
 
-        [Test(Description = "Cargamos del contexto con una proyección a un DTO (Una sóla consulta)")]
+        [Test]
         public void LoadDataWithDTO()
         {
-            var usuario = GetUsuarioDTO(_context);
+            var usuario = GetUsuarioDTO();
             Debug.WriteLine(usuario.Nombre + "\n");
-            foreach (var turno in usuario.Turnos.OrderByDescending(p => p.FechaDesde).ThenBy(p => p.NumeroSemana))
+            var turnos = usuario.Turnos
+                .OrderByDescending(p => p.FechaDesde)
+                .ThenBy(p => p.NumeroSemana);
+            foreach (var turno in turnos)
             {
                 Debug.WriteLine(turno.ToString());
                 foreach (var dia in turno.Dias)
@@ -72,17 +83,17 @@ namespace Turnos.Test
             }
         }
 
-        private TurnoDeUsuarioDTO GetUsuarioDTO(DPContext context)
+        private TurnoDeUsuarioDTO GetUsuarioDTO()
         {
-            return context.Usuarios
+            return _context.Usuarios
                     .Project()
                     .To<TurnoDeUsuarioDTO>()
                     .First();
         }
 
-        private Usuario GetUsuario(DPContext context)
+        private Usuario GetUsuario()
         {
-            return context.Usuarios.First();
+            return _context.Usuarios.First();
         }
 
         private void SetAutoMapperMaps()
@@ -102,25 +113,30 @@ namespace Turnos.Test
             var usuario = new Usuario { Nombre = "Miguel Angel Martín Hrdez", Empresa = empresa };
 
             var dateTime = DateTime.Now.AddDays(-100);
-            for (int i = 1; i <= _random.Next(1, 8); i++)
+            for (var i = 1; i <= _random.Next(1, 8); i++)
             {
                 dateTime = DateTime.Now.AddDays((double)decimal.Divide(-100, i));
 
                 for (var semana = 1; semana <= _random.Next(1, 8); semana++)
                 {
                     const int daysNumber = 28;
-                    usuario.AddTurno(dateTime.AddDays(daysNumber).Date, semana, "Turno Semanal");
+                    var turno = GetRandomEnumValue<Turno>();
+                    usuario.AddTurno(dateTime.AddDays(daysNumber).Date, semana, "Turno Semanal", turno);
                 }
             }
 
             context.Usuarios.Add(usuario);
-            context.SaveChanges();
         }
 
         private void DeleteData(DPContext context)
         {
             context.Empresas.Delete();
-            context.SaveChanges();
+        }
+
+        private T GetRandomEnumValue<T>() where T : struct, IConvertible
+        {
+            Array values = Enum.GetValues(typeof(T));
+            return (T)values.GetValue(_random.Next(values.Length));
         }
     }
 }

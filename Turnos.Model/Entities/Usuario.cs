@@ -19,7 +19,7 @@ namespace Turnos.Model.Entities
 
         public virtual ICollection<UsuarioTurno> Turnos { get; set; }
 
-        public void AddTurno(DateTime fechaDesde, int numeroSemana, string nombre)
+        public void AddTurno(DateTime fechaDesde, int numeroSemana, string nombre, Turno turno)
         {
             if (Turnos.Any(p => p.FechaDesde == fechaDesde && p.NumeroSemana == numeroSemana))
             {
@@ -29,7 +29,7 @@ namespace Turnos.Model.Entities
             var usuarioTurno = new UsuarioTurno(fechaDesde, nombre, numeroSemana);
             for (int dia = 1; dia <= 7; dia++)
             {
-                usuarioTurno.Dias.Add(new UsuarioTurnoDia(dia, Turno.Mañana, true));
+                usuarioTurno.Dias.Add(new UsuarioTurnoDia(dia, turno, true));
             }
 
             Turnos.Add(usuarioTurno);
