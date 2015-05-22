@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using EntityFramework.Extensions;
 using NUnit.Framework;
 using System;
 using System.Diagnostics;
@@ -22,11 +21,10 @@ namespace Turnos.Test
         {
             SetAutoMapperMaps();
 
-            _random = new Random();
             _context = new DPContext();
+            _random = new Random();
 
-            DeleteData(_context);
-            SeedData(_context);
+            DataSeeder.Seed(_context, _random);
             _context.SaveChanges();
         }
 
@@ -53,6 +51,7 @@ namespace Turnos.Test
                          orderby t.NumeroSemana
                          select t;
             //var turnos = usuario.Turnos.OrderByDescending(p => p.FechaDesde).ThenBy(p => p.NumeroSemana);
+
             foreach (var turno in turnos)
             {
                 Debug.WriteLine(turno.ToString());
@@ -72,6 +71,7 @@ namespace Turnos.Test
             var turnos = usuario.Turnos
                 .OrderByDescending(p => p.FechaDesde)
                 .ThenBy(p => p.NumeroSemana);
+
             foreach (var turno in turnos)
             {
                 Debug.WriteLine(turno.ToString());
@@ -107,36 +107,5 @@ namespace Turnos.Test
                 .ReverseMap();
         }
 
-        private void SeedData(DPContext context)
-        {
-            var empresa = new Empresa { PrimerDiaSemana = DiaSemana.Jueves };
-            var usuario = new Usuario { Nombre = "Miguel Angel Martín Hrdez", Empresa = empresa };
-
-            var dateTime = DateTime.Now.AddDays(-100);
-            for (var i = 1; i <= _random.Next(1, 8); i++)
-            {
-                dateTime = DateTime.Now.AddDays((double)decimal.Divide(-100, i));
-
-                for (var semana = 1; semana <= _random.Next(1, 8); semana++)
-                {
-                    const int daysNumber = 28;
-                    var turno = GetRandomEnumValue<Turno>();
-                    usuario.AddTurno(dateTime.AddDays(daysNumber).Date, semana, "Turno Semanal", turno);
-                }
-            }
-
-            context.Usuarios.Add(usuario);
-        }
-
-        private void DeleteData(DPContext context)
-        {
-            context.Empresas.Delete();
-        }
-
-        private T GetRandomEnumValue<T>() where T : struct, IConvertible
-        {
-            Array values = Enum.GetValues(typeof(T));
-            return (T)values.GetValue(_random.Next(values.Length));
-        }
     }
 }

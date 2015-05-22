@@ -70,9 +70,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnumUtilities.cs" />
     <Compile Include="GetUsuarioTest.cs" />
     <Compile Include="DTO\TurnoDeUsuarioDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DataSeeder.cs" />
+    <Compile Include="TurnoExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
