@@ -4,6 +4,8 @@
     {
         Mañana = 1,
         Tarde,
-        Rotativo
+        Rotativo,
+        Intermedio,
+        Otros
     }
 }
