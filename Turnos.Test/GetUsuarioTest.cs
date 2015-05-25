@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using NUnit.Framework;
 using System;
@@ -46,18 +47,20 @@ namespace Turnos.Test
         {
             var usuario = GetUsuario();
             Debug.WriteLine(usuario.Nombre + "\n");
-            var turnos = from t in usuario.Turnos
-                         orderby t.FechaDesde descending
-                         orderby t.NumeroSemana
-                         select t;
-            //var turnos = usuario.Turnos.OrderByDescending(p => p.FechaDesde).ThenBy(p => p.NumeroSemana);
-
-            foreach (var turno in turnos)
+            var secuenciaTurnos = from st in usuario.Secuencias
+                                  orderby st.FechaDesde descending
+                                  select st;
+            //var turnos = usuario.Turnos.OrderByDescending(p => p.FechaDesde).ThenBy(p => p.orden);
+            foreach (var secuenciaTurno in secuenciaTurnos)
             {
-                Debug.WriteLine(turno.ToString());
-                foreach (var dia in turno.Dias)
+                Debug.WriteLine(secuenciaTurno.ToString());
+                foreach (var turno in secuenciaTurno.Turnos)
                 {
-                    Debug.WriteLine("\t" + dia.ToString());
+                    Debug.WriteLine("\t" + turno.ToString());
+                    foreach (var dia in turno.Dias)
+                    {
+                        Debug.WriteLine("\t" + dia.ToString());
+                    }
                 }
                 Debug.WriteLine(String.Empty);
             }
@@ -68,27 +71,30 @@ namespace Turnos.Test
         {
             var usuario = GetUsuarioDTO();
             Debug.WriteLine(usuario.Nombre + "\n");
-            var turnos = usuario.Turnos
-                .OrderByDescending(p => p.FechaDesde)
-                .ThenBy(p => p.NumeroSemana);
+            var secuencias = usuario.Secuencias
+                .OrderByDescending(p => p.FechaDesde);
 
-            foreach (var turno in turnos)
+            foreach (var secuencia in secuencias)
             {
-                Debug.WriteLine(turno.ToString());
-                foreach (var dia in turno.Dias)
+                Debug.WriteLine(secuencia.ToString());
+                foreach (var turno in secuencia.Turnos)
                 {
-                    Debug.WriteLine("\t" + dia.ToString());
+                    Debug.WriteLine("\t" + turno.ToString());
+                    foreach (var dia in turno.Dias)
+                    {
+                        Debug.WriteLine("\t" + dia.ToString());
+                    }
                 }
-                Debug.WriteLine(String.Empty);
             }
         }
 
-        private TurnoDeUsuarioDTO GetUsuarioDTO()
+        private UsuarioDTO GetUsuarioDTO()
         {
-            return _context.Usuarios
-                    .Project()
-                    .To<TurnoDeUsuarioDTO>()
-                    .First();
+            var turnoDeUsuarioDTO = _context.Usuarios
+                .Project()
+                .To<UsuarioDTO>()
+                .First();
+            return turnoDeUsuarioDTO;
         }
 
         private Usuario GetUsuario()
@@ -98,14 +104,15 @@ namespace Turnos.Test
 
         private void SetAutoMapperMaps()
         {
-            Mapper.CreateMap<Usuario, TurnoDeUsuarioDTO>()
-                .ReverseMap();
-            Mapper.CreateMap<UsuarioTurno, TurnoDeUsuarioDTO.TurnoDTO>()
-                .ReverseMap();
-            Mapper.CreateMap<UsuarioTurnoDia, TurnoDeUsuarioDTO.DiaDTO>()
-                .ForMember(dst => dst.PrimerDiaSemana, opt => opt.MapFrom(src => src.UsuarioTurno.Usuario.Empresa.PrimerDiaSemana))
-                .ReverseMap();
-        }
+            Mapper.CreateMap<Usuario, UsuarioDTO>()
+                .ForMember(dst => dst.Secuencias, opt => opt.MapFrom(src => src.Secuencias));
 
+            Mapper.CreateMap<UsuarioSecuencia, UsuarioDTO.Secuencia>();
+
+            Mapper.CreateMap<UsuarioTurno, UsuarioDTO.Turno>();
+
+            Mapper.CreateMap<UsuarioTurnoDia, UsuarioDTO.TurnoDia>()
+                .ForMember(dst => dst.PrimerDiaSemana, opt => opt.MapFrom(src => src.UsuarioTurno.UsuarioSecuencia.Usuario.Empresa.PrimerDiaSemana));
+        }
     }
 }

@@ -19,6 +19,7 @@ namespace Turnos.Model
 
             modelBuilder.Entity<Empresa>().ToTable("Empresas");
             modelBuilder.Entity<Usuario>().ToTable("Usuarios");
+            modelBuilder.Entity<UsuarioSecuencia>().ToTable("UsuariosSecuencias");
             modelBuilder.Entity<UsuarioTurno>().ToTable("UsuariosTurnos");
             modelBuilder.Entity<UsuarioTurnoDia>()
                 .ToTable("UsuariosTurnosDias")

@@ -55,6 +55,7 @@
     <Compile Include="Entities\Empresa.cs" />
     <Compile Include="Entities\Turno.cs" />
     <Compile Include="Entities\Usuario.cs" />
+    <Compile Include="Entities\UsuarioSecuencia.cs" />
     <Compile Include="Entities\UsuarioTurno.cs" />
     <Compile Include="Entities\UsuarioTurnoDia.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

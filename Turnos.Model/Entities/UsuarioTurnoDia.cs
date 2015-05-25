@@ -22,9 +22,9 @@ namespace Turnos.Model.Entities
 
         public override string ToString()
         {
-            var primerDiaSemana = (int)UsuarioTurno.Usuario.Empresa.PrimerDiaSemana;
+            var primerDiaSemana = (int)UsuarioTurno.UsuarioSecuencia.Usuario.Empresa.PrimerDiaSemana;
 
-            IEnumerable<KeyValuePair<int, string>> diasSemana = Utilities.GetDiasSemanaOrdenados(primerDiaSemana);
+            var diasSemana = Utilities.GetDiasSemanaOrdenados(primerDiaSemana);
             return String.Format("Dia {0} ({1}) Turno: {2}. Trabaja: {3}.", Dia, diasSemana.ElementAt(Dia - 1), Turno.ToString(), Trabaja);
         }
     }

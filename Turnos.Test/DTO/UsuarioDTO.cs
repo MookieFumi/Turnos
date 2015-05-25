@@ -6,31 +6,42 @@ using Turnos.Model.Entities;
 
 namespace Turnos.Test.DTO
 {
-    internal class TurnoDeUsuarioDTO
+    class UsuarioDTO
     {
         public int EmpresaId { get; set; }
         public string Nombre { get; set; }
-        public ICollection<TurnoDTO> Turnos { get; set; }
+        public ICollection<Secuencia> Secuencias { get; set; }
 
-        internal class TurnoDTO
+        internal class Secuencia
         {
             public DateTime FechaDesde { get; set; }
-            public int NumeroSemana { get; set; }
             public string Nombre { get; set; }
 
-            public ICollection<DiaDTO> Dias { get; set; }
+            public ICollection<Turno> Turnos { get; set; }
 
             public override string ToString()
             {
-                return String.Format("{0}. {1} - {2}", FechaDesde.ToShortDateString(), Nombre, NumeroSemana);
+                return String.Format("{0} - {1}", Nombre, FechaDesde.ToShortDateString());
             }
         }
 
-        internal class DiaDTO
+        internal class Turno
+        {
+            public int Orden { get; set; }
+
+            public ICollection<TurnoDia> Dias { get; set; }
+
+            public override string ToString()
+            {
+                return String.Format("{0}", Orden);
+            }
+        }
+
+        internal class TurnoDia
         {
             public DiaSemana PrimerDiaSemana { get; set; }
             public int Dia { get; set; }
-            public Turno Turno { get; set; }
+            public Model.Entities.Turno Turno { get; set; }
             public bool Trabaja { get; set; }
 
             public override string ToString()

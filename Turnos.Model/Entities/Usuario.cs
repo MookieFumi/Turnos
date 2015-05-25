@@ -8,7 +8,7 @@ namespace Turnos.Model.Entities
     {
         public Usuario()
         {
-            Turnos = new HashSet<UsuarioTurno>();
+            Secuencias = new HashSet<UsuarioSecuencia>();
         }
 
         public int EmpresaId { get; set; }
@@ -17,22 +17,20 @@ namespace Turnos.Model.Entities
         public int UsuarioId { get; set; }
         public string Nombre { get; set; }
 
-        public virtual ICollection<UsuarioTurno> Turnos { get; set; }
+        public virtual ICollection<UsuarioSecuencia> Secuencias { get; set; }
 
-        public void AddTurno(DateTime fechaDesde, int numeroSemana, string nombre, Turno turno)
+        public void AddTurno(DateTime fechaDesde, string nombre, int orden, Turno turno)
         {
-            if (Turnos.Any(p => p.FechaDesde == fechaDesde && p.NumeroSemana == numeroSemana))
+            var secuenciaTurno = new UsuarioSecuencia(fechaDesde, nombre);
+            var usuarioTurno = new UsuarioTurno(orden);
+            for (var dia = 1; dia <= 7; dia++)
             {
-                throw new ArgumentException("Ya existe el número de semana para la fecha seleccionada");
-            }
-
-            var usuarioTurno = new UsuarioTurno(fechaDesde, nombre, numeroSemana);
-            for (int dia = 1; dia <= 7; dia++)
-            {
+                
                 usuarioTurno.Dias.Add(new UsuarioTurnoDia(dia, turno, true));
+                secuenciaTurno.Turnos.Add(usuarioTurno);
             }
-
-            Turnos.Add(usuarioTurno);
+            
+            Secuencias.Add(secuenciaTurno);
         }
     }
 }
