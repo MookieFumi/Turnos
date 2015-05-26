@@ -1,13 +1,11 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using EntityFramework.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Turnos.Model;
-using Turnos.Model.DTO;
 using Turnos.Model.Entities;
-using Turnos.Model.Services;
+using Turnos.Services;
+using Turnos.Services.DTO;
 
 namespace Turnos.Test
 {

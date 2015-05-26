@@ -7,9 +7,9 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using Turnos.Model;
-using Turnos.Model.DTO;
 using Turnos.Model.Entities;
-using Turnos.Model.Services;
+using Turnos.Services;
+using Turnos.Services.DTO;
 
 namespace Turnos.Test
 {
@@ -18,7 +18,7 @@ namespace Turnos.Test
         private Stopwatch _stopwatch;
         private Random _random;
         private DPContext _context;
-        private UsuariosService _usuarioService;
+        private IUsuariosService _usuarioService;
 
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
@@ -73,13 +73,13 @@ namespace Turnos.Test
             secuenciaDTO.Turnos.Add(new UsuarioDTO.TurnoDTO { Orden = 2, Dias = DataSeeder.GetRandomTurnosDiasDTO(_random).ToList() });
             secuenciaDTO.Turnos.Add(new UsuarioDTO.TurnoDTO { Orden = 3, Dias = DataSeeder.GetRandomTurnosDiasDTO(_random).ToList() });
 
-            var usuario = _context.Usuarios.First();
+            var usuario = _usuarioService.GetUsuarioDTO();
             var usuariosService = new UsuariosService(_context);
             usuariosService.AddSecuenciaTurno(usuario.UsuarioId, secuenciaDTO);
 
             _context.SaveChanges();
 
-            Assert.IsTrue(usuario.Secuencias.Any(p => p.FechaDesde == fechaDesde && p.Nombre == nombre));
+            Assert.IsTrue(_usuarioService.GetUsuarioDTO().Secuencias.Any(p => p.FechaDesde == fechaDesde && p.Nombre == nombre));
         }
 
         [Test]
@@ -87,7 +87,7 @@ namespace Turnos.Test
         {
             Assert.Throws<DbcException>(() =>
             {
-                var usuario = _context.Usuarios.First();
+                var usuario = _usuarioService.GetUsuarioDTO();
                 _usuarioService.AddSecuenciaTurno(usuario.UsuarioId, null);
             });
         }

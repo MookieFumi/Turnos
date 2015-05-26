@@ -1,21 +1,20 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using DesignByContract;
-using Turnos.Model.DTO;
+using Turnos.Model;
 using Turnos.Model.Entities;
+using Turnos.Services.DTO;
 
-namespace Turnos.Model.Services
+namespace Turnos.Services
 {
-    public class UsuariosService
+    public class UsuariosService : IUsuariosService
     {
         private readonly DPContext _context;
 
         public UsuariosService(DPContext context)
         {
             _context = context;
-
             SetAutoMapperMaps();
         }
 
@@ -40,23 +39,6 @@ namespace Turnos.Model.Services
             return turnoDeUsuarioDTO;
         }
 
-        public void UpdateSecuenciaTurno(int usuarioId, int usuarioSecuenciaId, UsuarioDTO.SecuenciaDTO secuenciaDTO)
-        {
-            var usuario = _context.Usuarios.Find(usuarioId);
-            Dbc.Requires(usuario != null, "No existe el usuario seleccinado");
-            Dbc.Requires(usuario.Secuencias.Any(p => p.UsuarioSecuenciaId == usuarioSecuenciaId), "No existe una secuencia para la fecha seleccionada");
-            Dbc.Requires(secuenciaDTO != null);
-
-            var usuarioTurnos = _context.UsuarioTurnos.Where(p => p.UsuarioSecuenciaId == usuarioSecuenciaId).ToList();
-            foreach (var usuarioTurno in usuarioTurnos)
-            {
-                _context.UsuarioTurnos.Remove(usuarioTurno);
-            }
-
-            var secuencia = usuario.Secuencias.Single(p => p.UsuarioSecuenciaId == secuenciaDTO.UsuarioSecuenciaId);
-            Mapper.Map(secuenciaDTO, secuencia);
-        }
-
         public void RemoveSecuenciaTurno(int usuarioId, int usuarioSecuenciaId)
         {
             var usuario = _context.Usuarios.Find(usuarioId);
@@ -64,7 +46,24 @@ namespace Turnos.Model.Services
             Dbc.Requires(usuario.Secuencias.Any(p => p.UsuarioSecuenciaId == usuarioSecuenciaId), "No existe la secuencia seleccionada");
 
             var usuarioSecuencia = usuario.Secuencias.Single(p => p.UsuarioSecuenciaId == usuarioSecuenciaId);
-            _context.UsuarioSecuencias.Remove(usuarioSecuencia);
+            _context.UsuariosSecuencias.Remove(usuarioSecuencia);
+        }
+
+        public void UpdateSecuenciaTurno(int usuarioId, int usuarioSecuenciaId, UsuarioDTO.SecuenciaDTO secuenciaDTO)
+        {
+            var usuario = _context.Usuarios.Find(usuarioId);
+            Dbc.Requires(usuario != null, "No existe el usuario seleccinado");
+            Dbc.Requires(usuario.Secuencias.Any(p => p.UsuarioSecuenciaId == usuarioSecuenciaId), "No existe una secuencia para la fecha seleccionada");
+            Dbc.Requires(secuenciaDTO != null);
+
+            var usuarioTurnos = _context.UsuariosSecuenciasTurnos.Where(p => p.UsuarioSecuenciaId == usuarioSecuenciaId).ToList();
+            foreach (var usuarioTurno in usuarioTurnos)
+            {
+                _context.UsuariosSecuenciasTurnos.Remove(usuarioTurno);
+            }
+
+            var secuencia = usuario.Secuencias.Single(p => p.UsuarioSecuenciaId == secuenciaDTO.UsuarioSecuenciaId);
+            Mapper.Map(secuenciaDTO, secuencia);
         }
 
         private static void SetAutoMapperMaps()
@@ -74,14 +73,14 @@ namespace Turnos.Model.Services
             Mapper.CreateMap<UsuarioDTO.SecuenciaDTO, UsuarioSecuencia>()
                 .ReverseMap();
 
-            Mapper.CreateMap<UsuarioDTO.TurnoDTO, UsuarioTurno>()
+            Mapper.CreateMap<UsuarioDTO.TurnoDTO, UsuarioSecuenciaTurno>()
                 .ReverseMap();
 
-            Mapper.CreateMap<UsuarioDTO.TurnoDiaDTO, UsuarioTurnoDia>();
+            Mapper.CreateMap<UsuarioDTO.TurnoDiaDTO, UsuarioSecuenciaTurnoDia>();
 
-            Mapper.CreateMap<UsuarioTurnoDia, UsuarioDTO.TurnoDiaDTO>()
+            Mapper.CreateMap<UsuarioSecuenciaTurnoDia, UsuarioDTO.TurnoDiaDTO>()
                 .ForMember(dst => dst.PrimerDiaSemana,
-                    opt => opt.MapFrom(src => src.UsuarioTurno.UsuarioSecuencia.Usuario.Empresa.PrimerDiaSemana));
+                    opt => opt.MapFrom(src => src.UsuarioSecuenciaTurno.UsuarioSecuencia.Usuario.Empresa.PrimerDiaSemana));
         }
     }
 }

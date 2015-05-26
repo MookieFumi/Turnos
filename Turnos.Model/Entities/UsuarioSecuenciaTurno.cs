@@ -3,27 +3,27 @@ using System.Collections.Generic;
 
 namespace Turnos.Model.Entities
 {
-    public class UsuarioTurno
+    public class UsuarioSecuenciaTurno
     {
-        public UsuarioTurno()
+        public UsuarioSecuenciaTurno()
         {
 
         }
 
-        public UsuarioTurno(int orden)
+        public UsuarioSecuenciaTurno(int orden)
         {
             Orden = orden;
-            Dias = new HashSet<UsuarioTurnoDia>();
+            Dias = new HashSet<UsuarioSecuenciaTurnoDia>();
         }
 
-        public int UsuarioTurnoId { get; set; }
+        public int UsuarioSecuenciaTurnoId { get; set; }
 
         public int UsuarioSecuenciaId { get; set; }
         public virtual UsuarioSecuencia UsuarioSecuencia { get; set; }
 
         public int Orden { get; set; }
 
-        public virtual ICollection<UsuarioTurnoDia> Dias { get; set; }
+        public virtual ICollection<UsuarioSecuenciaTurnoDia> Dias { get; set; }
 
         public override string ToString()
         {

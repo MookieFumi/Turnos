@@ -14,7 +14,7 @@ namespace Turnos.Model.Entities
         {
             FechaDesde = fechaDesde;
             Nombre = nombre;
-            Turnos = new HashSet<UsuarioTurno>();
+            Turnos = new HashSet<UsuarioSecuenciaTurno>();
         }
 
         public int UsuarioSecuenciaId { get; set; }
@@ -25,7 +25,7 @@ namespace Turnos.Model.Entities
         public DateTime FechaDesde { get; set; }
         public string Nombre { get; set; }
 
-        public ICollection<UsuarioTurno> Turnos { get; set; }
+        public ICollection<UsuarioSecuenciaTurno> Turnos { get; set; }
 
         public override string ToString()
         {

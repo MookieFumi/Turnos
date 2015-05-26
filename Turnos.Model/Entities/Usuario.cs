@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO.Compression;
 using System.Linq;
-using Turnos.Model.DTO;
-using AutoMapper;
 
 namespace Turnos.Model.Entities
 {

@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Turnos.Model;
 using Turnos.Model.Entities;
 
-namespace Turnos.Model.DTO
+namespace Turnos.Services.DTO
 {
     public class UsuarioDTO
     {
-        public int EmpresaId { get; set; }
-        public int UsuarioId { get; set; }
         public string Nombre { get; set; }
         public ICollection<SecuenciaDTO> Secuencias { get; set; }
+        public int UsuarioId { get; set; }
 
         public class SecuenciaDTO
         {
@@ -18,10 +18,11 @@ namespace Turnos.Model.DTO
             {
                 Turnos = new HashSet<TurnoDTO>();
             }
-            public int UsuarioSecuenciaId { get; set; }
+
             public DateTime FechaDesde { get; set; }
             public string Nombre { get; set; }
             public ICollection<TurnoDTO> Turnos { get; set; }
+            public int UsuarioSecuenciaId { get; set; }
 
             public override string ToString()
             {
@@ -33,11 +34,11 @@ namespace Turnos.Model.DTO
         {
             public TurnoDTO()
             {
-            Dias= new HashSet<TurnoDiaDTO>();    
+                Dias = new HashSet<TurnoDiaDTO>();
             }
 
-            public int Orden { get; set; }
             public ICollection<TurnoDiaDTO> Dias { get; set; }
+            public int Orden { get; set; }
 
             public override string ToString()
             {
@@ -47,15 +48,15 @@ namespace Turnos.Model.DTO
 
         public class TurnoDiaDTO
         {
-            public DiaSemana PrimerDiaSemana { get; set; }
             public int Dia { get; set; }
-            public Turno Turno { get; set; }
+            public DiaSemana PrimerDiaSemana { get; set; }
             public bool Trabaja { get; set; }
+            public Turno Turno { get; set; }
 
             public override string ToString()
             {
                 IEnumerable<KeyValuePair<int, string>> diasSemana = Utilities.GetDiasSemanaOrdenados((int)PrimerDiaSemana);
-                return String.Format("Dia {0} ({1}) Turno: {2}. Trabaja: {3}.", Dia, diasSemana.ElementAt(Dia - 1), Turno.ToString(), Trabaja);
+                return String.Format("Dia {0} ({1}) Turno: {2}. Trabaja: {3}.", Dia, diasSemana.ElementAt(Dia - 1), Turno, Trabaja);
             }
         }
     }

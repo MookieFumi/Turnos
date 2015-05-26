@@ -12,8 +12,8 @@ namespace Turnos.Model
 
         public DbSet<Empresa> Empresas { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
-        public DbSet<UsuarioSecuencia> UsuarioSecuencias { get; set; }
-        public DbSet<UsuarioTurno> UsuarioTurnos { get; set; }
+        public DbSet<UsuarioSecuencia> UsuariosSecuencias { get; set; }
+        public DbSet<UsuarioSecuenciaTurno> UsuariosSecuenciasTurnos { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -22,10 +22,10 @@ namespace Turnos.Model
             modelBuilder.Entity<Empresa>().ToTable("Empresas");
             modelBuilder.Entity<Usuario>().ToTable("Usuarios");
             modelBuilder.Entity<UsuarioSecuencia>().ToTable("UsuariosSecuencias");
-            modelBuilder.Entity<UsuarioTurno>().ToTable("UsuariosTurnos");
-            modelBuilder.Entity<UsuarioTurnoDia>()
-                .ToTable("UsuariosTurnosDias")
-                .HasKey(p => new { p.UsuarioTurnoId, p.Dia });
+            modelBuilder.Entity<UsuarioSecuenciaTurno>().ToTable("UsuariosSecuenciasTurnos");
+            modelBuilder.Entity<UsuarioSecuenciaTurnoDia>()
+                .ToTable("UsuariosSecuenciasTurnosDias")
+                .HasKey(p => new { p.UsuarioSecuenciaTurnoId, p.Dia });
         }
     }
 }
