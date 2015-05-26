@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Compression;
 using System.Linq;
+using Turnos.Model.DTO;
+using AutoMapper;
 
 namespace Turnos.Model.Entities
 {
@@ -18,19 +21,5 @@ namespace Turnos.Model.Entities
         public string Nombre { get; set; }
 
         public virtual ICollection<UsuarioSecuencia> Secuencias { get; set; }
-
-        public void AddTurno(DateTime fechaDesde, string nombre, int orden, Turno turno)
-        {
-            var secuenciaTurno = new UsuarioSecuencia(fechaDesde, nombre);
-            var usuarioTurno = new UsuarioTurno(orden);
-            for (var dia = 1; dia <= 7; dia++)
-            {
-                
-                usuarioTurno.Dias.Add(new UsuarioTurnoDia(dia, turno, true));
-                secuenciaTurno.Turnos.Add(usuarioTurno);
-            }
-            
-            Secuencias.Add(secuenciaTurno);
-        }
     }
 }

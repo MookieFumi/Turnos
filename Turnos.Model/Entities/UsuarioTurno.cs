@@ -5,7 +5,12 @@ namespace Turnos.Model.Entities
 {
     public class UsuarioTurno
     {
-        public UsuarioTurno( int orden)
+        public UsuarioTurno()
+        {
+
+        }
+
+        public UsuarioTurno(int orden)
         {
             Orden = orden;
             Dias = new HashSet<UsuarioTurnoDia>();

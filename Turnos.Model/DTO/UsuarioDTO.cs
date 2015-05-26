@@ -1,23 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Turnos.Model;
 using Turnos.Model.Entities;
 
-namespace Turnos.Test.DTO
+namespace Turnos.Model.DTO
 {
-    class UsuarioDTO
+    public class UsuarioDTO
     {
         public int EmpresaId { get; set; }
+        public int UsuarioId { get; set; }
         public string Nombre { get; set; }
-        public ICollection<Secuencia> Secuencias { get; set; }
+        public ICollection<SecuenciaDTO> Secuencias { get; set; }
 
-        internal class Secuencia
+        public class SecuenciaDTO
         {
+            public SecuenciaDTO()
+            {
+                Turnos = new HashSet<TurnoDTO>();
+            }
+            public int UsuarioSecuenciaId { get; set; }
             public DateTime FechaDesde { get; set; }
             public string Nombre { get; set; }
-
-            public ICollection<Turno> Turnos { get; set; }
+            public ICollection<TurnoDTO> Turnos { get; set; }
 
             public override string ToString()
             {
@@ -25,11 +29,15 @@ namespace Turnos.Test.DTO
             }
         }
 
-        internal class Turno
+        public class TurnoDTO
         {
-            public int Orden { get; set; }
+            public TurnoDTO()
+            {
+            Dias= new HashSet<TurnoDiaDTO>();    
+            }
 
-            public ICollection<TurnoDia> Dias { get; set; }
+            public int Orden { get; set; }
+            public ICollection<TurnoDiaDTO> Dias { get; set; }
 
             public override string ToString()
             {
@@ -37,11 +45,11 @@ namespace Turnos.Test.DTO
             }
         }
 
-        internal class TurnoDia
+        public class TurnoDiaDTO
         {
             public DiaSemana PrimerDiaSemana { get; set; }
             public int Dia { get; set; }
-            public Model.Entities.Turno Turno { get; set; }
+            public Turno Turno { get; set; }
             public bool Trabaja { get; set; }
 
             public override string ToString()

@@ -5,6 +5,11 @@ namespace Turnos.Model.Entities
 {
     public class UsuarioSecuencia
     {
+        public UsuarioSecuencia()
+        {
+            
+        }
+
         public UsuarioSecuencia(DateTime fechaDesde, string nombre)
         {
             FechaDesde = fechaDesde;

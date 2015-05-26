@@ -12,6 +12,8 @@ namespace Turnos.Model
 
         public DbSet<Empresa> Empresas { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<UsuarioSecuencia> UsuarioSecuencias { get; set; }
+        public DbSet<UsuarioTurno> UsuarioTurnos { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
