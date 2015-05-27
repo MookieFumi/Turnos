@@ -21,27 +21,26 @@ namespace Turnos.Test
             context.SaveChanges();
 
             var fechaDesde = DateTime.Now.AddDays(-20).Date;
-            var secuenciaDTO = new UsuarioDTO.SecuenciaDTO { FechaDesde = fechaDesde, Nombre = "Secuencia" };
-            secuenciaDTO.Turnos.Add(new UsuarioDTO.TurnoDTO { Orden = 1, Dias = GetRandomTurnosDiasDTO(random).ToList() });
-            secuenciaDTO.Turnos.Add(new UsuarioDTO.TurnoDTO { Orden = 2, Dias = GetRandomTurnosDiasDTO(random).ToList() });
+            var turnoSemanalDTO = new UsuarioDTO.TurnoSemanalDTO { FechaDesde = fechaDesde };
+            turnoSemanalDTO.Secuencias.Add(new UsuarioDTO.TurnoSemanalSecuenciaDTO { Orden = 1, Dias = GetRandomTurnoSemanalSecuenciaDiaDTOItems(random).ToList() });
+            turnoSemanalDTO.Secuencias.Add(new UsuarioDTO.TurnoSemanalSecuenciaDTO { Orden = 2, Dias = GetRandomTurnoSemanalSecuenciaDiaDTOItems(random).ToList() });
 
             var usuariosService = new UsuariosService(context);
-            usuariosService.AddSecuenciaTurno(usuario.UsuarioId, secuenciaDTO);
+            usuariosService.AddTurnoSemanal(usuario.UsuarioId, turnoSemanalDTO);
 
             context.SaveChanges();
         }
 
-        public static IEnumerable<UsuarioDTO.TurnoDiaDTO> GetRandomTurnosDiasDTO(Random random)
+        public static IEnumerable<UsuarioDTO.TurnoSemanalSecuenciaDiaDTO> GetRandomTurnoSemanalSecuenciaDiaDTOItems(Random random)
         {
-            var items = Enumerable.Empty<UsuarioDTO.TurnoDiaDTO>().ToList();
+            var items = Enumerable.Empty<UsuarioDTO.TurnoSemanalSecuenciaDiaDTO>().ToList();
             for (var dia = 1; dia <= 7; dia++)
             {
                 var turno = new Turno().GetRandom(random);
-                items.Add(new UsuarioDTO.TurnoDiaDTO
+                items.Add(new UsuarioDTO.TurnoSemanalSecuenciaDiaDTO
                 {
                     Dia = dia,
-                    Turno = turno,
-                    Trabaja = true
+                    Turno = turno
                 });
             }
             return items;

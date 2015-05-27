@@ -59,9 +59,9 @@
     <Compile Include="Entities\Empresa.cs" />
     <Compile Include="Entities\Turno.cs" />
     <Compile Include="Entities\Usuario.cs" />
-    <Compile Include="Entities\UsuarioSecuencia.cs" />
-    <Compile Include="Entities\UsuarioSecuenciaTurno.cs" />
-    <Compile Include="Entities\UsuarioSecuenciaTurnoDia.cs" />
+    <Compile Include="Entities\UsuarioTurnoSemanal.cs" />
+    <Compile Include="Entities\UsuarioTurnoSemanalSecuencia.cs" />
+    <Compile Include="Entities\UsuarioTurnoSemanalSecuenciaDia.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>

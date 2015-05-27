@@ -48,13 +48,13 @@ namespace Turnos.Test
         {
             var usuario = _usuarioService.GetUsuarioDTO();
             Debug.WriteLine(usuario.Nombre + "\n");
-            var secuencias = usuario.Secuencias
+            var secuencias = usuario.TurnosSemanales
                 .OrderByDescending(p => p.FechaDesde);
 
             secuencias.Each(secuencia =>
             {
                 Debug.WriteLine(secuencia.ToString());
-                secuencia.Turnos.Each(turno =>
+                secuencia.Secuencias.Each(turno =>
                 {
                     Debug.WriteLine("\t" + turno.ToString());
                     turno.Dias.Each(dia => Debug.WriteLine("\t" + dia.ToString()));
@@ -68,18 +68,18 @@ namespace Turnos.Test
         {
             var fechaDesde = DateTime.Now.AddDays(-10).Date;
             const string nombre = "Secuencia-10";
-            var secuenciaDTO = new UsuarioDTO.SecuenciaDTO { FechaDesde = fechaDesde, Nombre = nombre };
-            secuenciaDTO.Turnos.Add(new UsuarioDTO.TurnoDTO { Orden = 1, Dias = DataSeeder.GetRandomTurnosDiasDTO(_random).ToList() });
-            secuenciaDTO.Turnos.Add(new UsuarioDTO.TurnoDTO { Orden = 2, Dias = DataSeeder.GetRandomTurnosDiasDTO(_random).ToList() });
-            secuenciaDTO.Turnos.Add(new UsuarioDTO.TurnoDTO { Orden = 3, Dias = DataSeeder.GetRandomTurnosDiasDTO(_random).ToList() });
+            var secuenciaDTO = new UsuarioDTO.TurnoSemanalDTO { FechaDesde = fechaDesde };
+            secuenciaDTO.Secuencias.Add(new UsuarioDTO.TurnoSemanalSecuenciaDTO { Orden = 1, Dias = DataSeeder.GetRandomTurnoSemanalSecuenciaDiaDTOItems(_random).ToList() });
+            secuenciaDTO.Secuencias.Add(new UsuarioDTO.TurnoSemanalSecuenciaDTO { Orden = 2, Dias = DataSeeder.GetRandomTurnoSemanalSecuenciaDiaDTOItems(_random).ToList() });
+            secuenciaDTO.Secuencias.Add(new UsuarioDTO.TurnoSemanalSecuenciaDTO { Orden = 3, Dias = DataSeeder.GetRandomTurnoSemanalSecuenciaDiaDTOItems(_random).ToList() });
 
             var usuario = _usuarioService.GetUsuarioDTO();
             var usuariosService = new UsuariosService(_context);
-            usuariosService.AddSecuenciaTurno(usuario.UsuarioId, secuenciaDTO);
+            usuariosService.AddTurnoSemanal(usuario.UsuarioId, secuenciaDTO);
 
             _context.SaveChanges();
 
-            Assert.IsTrue(_usuarioService.GetUsuarioDTO().Secuencias.Any(p => p.FechaDesde == fechaDesde && p.Nombre == nombre));
+            Assert.IsTrue(_usuarioService.GetUsuarioDTO().TurnosSemanales.Any(p => p.FechaDesde == fechaDesde));
         }
 
         [Test]
@@ -88,32 +88,31 @@ namespace Turnos.Test
             Assert.Throws<DbcException>(() =>
             {
                 var usuario = _usuarioService.GetUsuarioDTO();
-                _usuarioService.AddSecuenciaTurno(usuario.UsuarioId, null);
+                _usuarioService.AddTurnoSemanal(usuario.UsuarioId, null);
             });
         }
 
         [Test]
         public void When_AddSecuencia_If_UsuarioId_Not_Exists_Throws_DbcException()
         {
-            Assert.Throws<DbcException>(() => _usuarioService.AddSecuenciaTurno(9999, new UsuarioDTO.SecuenciaDTO()));
+            Assert.Throws<DbcException>(() => _usuarioService.AddTurnoSemanal(9999, new UsuarioDTO.TurnoSemanalDTO()));
         }
 
         [Test]
         public void When_UpdateSecuenciaTurno_Update_Data()
         {
             var usuarioDTO = _usuarioService.GetUsuarioDTO();
-            var secuenciaDTO = usuarioDTO.Secuencias.First();
-            secuenciaDTO.Nombre = "S E C U E N C I A --";
-            secuenciaDTO.Turnos.ToList().Each(turno =>
+            var secuenciaDTO = usuarioDTO.TurnosSemanales.First();
+            secuenciaDTO.Secuencias.ToList().Each(turno =>
                 turno.Dias.ToList().Each(dia =>
                     dia.Turno = new Turno().GetRandom(_random)
                 )
             );
 
-            _usuarioService.UpdateSecuenciaTurno(usuarioDTO.UsuarioId, usuarioDTO.Secuencias.First().UsuarioSecuenciaId, secuenciaDTO);
+            _usuarioService.UpdateTurnoSemanal(usuarioDTO.UsuarioId, usuarioDTO.TurnosSemanales.First().UsuarioTurnoSemanalId, secuenciaDTO);
             _context.SaveChanges();
 
-            Assert.IsTrue(_usuarioService.GetUsuarioDTO().Secuencias.Any(p => p.Nombre == secuenciaDTO.Nombre && p.FechaDesde == secuenciaDTO.FechaDesde));
+            Assert.IsTrue(_usuarioService.GetUsuarioDTO().TurnosSemanales.Any(p => p.FechaDesde == secuenciaDTO.FechaDesde));
         }
 
         [Test]
@@ -122,14 +121,14 @@ namespace Turnos.Test
             Assert.Throws<DbcException>(() =>
             {
                 var usuario = _usuarioService.GetUsuarioDTO();
-                _usuarioService.UpdateSecuenciaTurno(usuario.UsuarioId, 999, new UsuarioDTO.SecuenciaDTO());
+                _usuarioService.UpdateTurnoSemanal(usuario.UsuarioId, 999, new UsuarioDTO.TurnoSemanalDTO());
             });
         }
 
         [Test]
         public void When_UpdateSecuenciaTurno_If_UsuarioId_Not_Exists_Throws_DbcException()
         {
-            Assert.Throws<DbcException>(() => _usuarioService.UpdateSecuenciaTurno(9999, 9999, new UsuarioDTO.SecuenciaDTO()));
+            Assert.Throws<DbcException>(() => _usuarioService.UpdateTurnoSemanal(9999, 9999, new UsuarioDTO.TurnoSemanalDTO()));
         }
 
         [Test]
@@ -138,7 +137,7 @@ namespace Turnos.Test
             Assert.Throws<DbcException>(() =>
             {
                 var usuario = _usuarioService.GetUsuarioDTO();
-                _usuarioService.UpdateSecuenciaTurno(usuario.UsuarioId, usuario.Secuencias.First().UsuarioSecuenciaId, null);
+                _usuarioService.UpdateTurnoSemanal(usuario.UsuarioId, usuario.TurnosSemanales.First().UsuarioTurnoSemanalId, null);
             });
         }
 
@@ -146,12 +145,12 @@ namespace Turnos.Test
         public void When_RemoveSecuenciaTurno_Remove_Data()
         {
             var usuarioDTO = _usuarioService.GetUsuarioDTO();
-            var secuenciaDTO = usuarioDTO.Secuencias.First();
+            var secuenciaDTO = usuarioDTO.TurnosSemanales.First();
 
-            _usuarioService.RemoveSecuenciaTurno(usuarioDTO.UsuarioId, secuenciaDTO.UsuarioSecuenciaId);
+            _usuarioService.RemoveTurnoSemanal(usuarioDTO.UsuarioId, secuenciaDTO.UsuarioTurnoSemanalId);
             _context.SaveChanges();
 
-            Assert.IsTrue(_usuarioService.GetUsuarioDTO().Secuencias.All(p => p.UsuarioSecuenciaId != secuenciaDTO.UsuarioSecuenciaId));
+            Assert.IsTrue(_usuarioService.GetUsuarioDTO().TurnosSemanales.All(p => p.UsuarioTurnoSemanalId != secuenciaDTO.UsuarioTurnoSemanalId));
         }
 
         [Test]
@@ -160,14 +159,14 @@ namespace Turnos.Test
             Assert.Throws<DbcException>(() =>
             {
                 var usuario = _usuarioService.GetUsuarioDTO();
-                _usuarioService.RemoveSecuenciaTurno(usuario.UsuarioId, 999);
+                _usuarioService.RemoveTurnoSemanal(usuario.UsuarioId, 999);
             });
         }
 
         [Test]
         public void When_RemoveSecuenciaTurno_If_UsuarioId_Not_Exists_Throws_DbcException()
         {
-            Assert.Throws<DbcException>(() => _usuarioService.RemoveSecuenciaTurno(9999, 9999));
+            Assert.Throws<DbcException>(() => _usuarioService.RemoveTurnoSemanal(9999, 9999));
         }
     }
 }

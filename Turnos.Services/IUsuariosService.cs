@@ -4,9 +4,9 @@ namespace Turnos.Services
 {
     public interface IUsuariosService
     {
-        void AddSecuenciaTurno(int usuarioId, UsuarioDTO.SecuenciaDTO secuenciaDTO);
+        void AddTurnoSemanal(int usuarioId, UsuarioDTO.TurnoSemanalDTO turnoSemanalDTO);
         UsuarioDTO GetUsuarioDTO();
-        void RemoveSecuenciaTurno(int usuarioId, int usuarioSecuenciaId);
-        void UpdateSecuenciaTurno(int usuarioId, int usuarioSecuenciaId, UsuarioDTO.SecuenciaDTO secuenciaDTO);
+        void RemoveTurnoSemanal(int usuarioId, int usuarioTurnoSemanalId);
+        void UpdateTurnoSemanal(int usuarioId, int usuarioTurnoSemanalId, UsuarioDTO.TurnoSemanalDTO turnoSemanalDTO);
     }
 }

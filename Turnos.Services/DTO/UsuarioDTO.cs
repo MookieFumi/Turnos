@@ -8,37 +8,38 @@ namespace Turnos.Services.DTO
 {
     public class UsuarioDTO
     {
-        public string Nombre { get; set; }
-        public ICollection<SecuenciaDTO> Secuencias { get; set; }
         public int UsuarioId { get; set; }
+        public string Nombre { get; set; }
+        public ICollection<TurnoSemanalDTO> TurnosSemanales { get; set; }
 
-        public class SecuenciaDTO
+        public class TurnoSemanalDTO
         {
-            public SecuenciaDTO()
+            public TurnoSemanalDTO()
             {
-                Turnos = new HashSet<TurnoDTO>();
+                Secuencias = new HashSet<TurnoSemanalSecuenciaDTO>();
             }
 
+            public int UsuarioTurnoSemanalId { get; set; }
             public DateTime FechaDesde { get; set; }
-            public string Nombre { get; set; }
-            public ICollection<TurnoDTO> Turnos { get; set; }
-            public int UsuarioSecuenciaId { get; set; }
+            public ICollection<TurnoSemanalSecuenciaDTO> Secuencias { get; set; }
+
 
             public override string ToString()
             {
-                return String.Format("{0} - {1}", Nombre, FechaDesde.ToShortDateString());
+                return String.Format("{0}", FechaDesde.ToShortDateString());
             }
         }
 
-        public class TurnoDTO
+        public class TurnoSemanalSecuenciaDTO
         {
-            public TurnoDTO()
+            public TurnoSemanalSecuenciaDTO()
             {
-                Dias = new HashSet<TurnoDiaDTO>();
+                Dias = new HashSet<TurnoSemanalSecuenciaDiaDTO>();
             }
 
-            public ICollection<TurnoDiaDTO> Dias { get; set; }
+            public int UsuarioTurnoSemanalSecuenciaId { get; set; }
             public int Orden { get; set; }
+            public ICollection<TurnoSemanalSecuenciaDiaDTO> Dias { get; set; }
 
             public override string ToString()
             {
@@ -46,17 +47,18 @@ namespace Turnos.Services.DTO
             }
         }
 
-        public class TurnoDiaDTO
+        public class TurnoSemanalSecuenciaDiaDTO
         {
+            public int UsuarioTurnoSemanalSecuenciaId { get; set; }
+
             public int Dia { get; set; }
             public DiaSemana PrimerDiaSemana { get; set; }
-            public bool Trabaja { get; set; }
-            public Turno Turno { get; set; }
+            public Turno? Turno { get; set; }
 
             public override string ToString()
             {
                 IEnumerable<KeyValuePair<int, string>> diasSemana = Utilities.GetDiasSemanaOrdenados((int)PrimerDiaSemana);
-                return String.Format("Dia {0} ({1}) Turno: {2}. Trabaja: {3}.", Dia, diasSemana.ElementAt(Dia - 1), Turno, Trabaja);
+                return String.Format("Dia {0} ({1}) Turno: {2}.", Dia, diasSemana.ElementAt(Dia - 1), Turno);
             }
         }
     }

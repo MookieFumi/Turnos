@@ -9,7 +9,7 @@ namespace Turnos.Model.Entities
     {
         public Usuario()
         {
-            Secuencias = new HashSet<UsuarioSecuencia>();
+            TurnosSemanales = new HashSet<UsuarioTurnoSemanal>();
         }
 
         public int EmpresaId { get; set; }
@@ -18,6 +18,6 @@ namespace Turnos.Model.Entities
         public int UsuarioId { get; set; }
         public string Nombre { get; set; }
 
-        public virtual ICollection<UsuarioSecuencia> Secuencias { get; set; }
+        public virtual ICollection<UsuarioTurnoSemanal> TurnosSemanales { get; set; }
     }
 }

@@ -12,8 +12,8 @@ namespace Turnos.Model
 
         public DbSet<Empresa> Empresas { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
-        public DbSet<UsuarioSecuencia> UsuariosSecuencias { get; set; }
-        public DbSet<UsuarioSecuenciaTurno> UsuariosSecuenciasTurnos { get; set; }
+        public DbSet<UsuarioTurnoSemanal> UsuariosTurnosSemanales { get; set; }
+        public DbSet<UsuarioTurnoSemanalSecuencia> UsuariosTurnosSemanalesSecuencias { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -21,11 +21,11 @@ namespace Turnos.Model
 
             modelBuilder.Entity<Empresa>().ToTable("Empresas");
             modelBuilder.Entity<Usuario>().ToTable("Usuarios");
-            modelBuilder.Entity<UsuarioSecuencia>().ToTable("UsuariosSecuencias");
-            modelBuilder.Entity<UsuarioSecuenciaTurno>().ToTable("UsuariosSecuenciasTurnos");
-            modelBuilder.Entity<UsuarioSecuenciaTurnoDia>()
-                .ToTable("UsuariosSecuenciasTurnosDias")
-                .HasKey(p => new { p.UsuarioSecuenciaTurnoId, p.Dia });
+            
+            modelBuilder.Entity<UsuarioTurnoSemanal>().ToTable("UsuariosTurnosSemanales");
+            modelBuilder.Entity<UsuarioTurnoSemanalSecuencia>().ToTable("UsuariosTurnosSemanalesSecuencias");
+            modelBuilder.Entity<UsuarioTurnoSemanalSecuenciaDia>().ToTable("UsuariosTurnosSemanalesSecuenciasDias")
+                .HasKey(p => new { p.UsuarioTurnoSemanalSecuenciaId, p.Dia });
         }
     }
 }
