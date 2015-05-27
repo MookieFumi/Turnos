@@ -105,11 +105,10 @@ namespace Turnos.Test
             var secuenciaDTO = usuarioDTO.Secuencias.First();
             secuenciaDTO.Nombre = "S E C U E N C I A --";
             secuenciaDTO.Turnos.ToList().Each(turno =>
-            {
                 turno.Dias.ToList().Each(dia =>
                     dia.Turno = new Turno().GetRandom(_random)
-                );
-            });
+                )
+            );
 
             _usuarioService.UpdateSecuenciaTurno(usuarioDTO.UsuarioId, usuarioDTO.Secuencias.First().UsuarioSecuenciaId, secuenciaDTO);
             _context.SaveChanges();
@@ -152,7 +151,7 @@ namespace Turnos.Test
             _usuarioService.RemoveSecuenciaTurno(usuarioDTO.UsuarioId, secuenciaDTO.UsuarioSecuenciaId);
             _context.SaveChanges();
 
-            Assert.IsTrue(!_usuarioService.GetUsuarioDTO().Secuencias.Any(p => p.UsuarioSecuenciaId == secuenciaDTO.UsuarioSecuenciaId));
+            Assert.IsTrue(_usuarioService.GetUsuarioDTO().Secuencias.All(p => p.UsuarioSecuenciaId != secuenciaDTO.UsuarioSecuenciaId));
         }
 
         [Test]
