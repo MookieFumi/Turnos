@@ -168,5 +168,20 @@ namespace Turnos.Test
         {
             Assert.Throws<DbcException>(() => _usuarioService.RemoveTurnoSemanal(9999, 9999));
         }
+
+        [Test]
+        [TestCase(DiaSemana.Lunes, DiaSemana.Domingo)]
+        [TestCase(DiaSemana.Martes, DiaSemana.Lunes)]
+        [TestCase(DiaSemana.Miercoles, DiaSemana.Martes)]
+        [TestCase(DiaSemana.Jueves, DiaSemana.Miercoles)]
+        [TestCase(DiaSemana.Viernes, DiaSemana.Jueves)]
+        [TestCase(DiaSemana.Sabado, DiaSemana.Viernes)]
+        [TestCase(DiaSemana.Domingo, DiaSemana.Sabado)]
+        public void When_GetDiasSemanaOrdenados_Returns_Expected_Data(DiaSemana primerDiaSemana, DiaSemana ultimaDiaSemana)
+        {
+            IEnumerable<KeyValuePair<int, string>> list = Utilities.GetDiasSemanaOrdenados(primerDiaSemana).ToList();
+            Assert.AreEqual(list.First().Key, (int)primerDiaSemana);
+            Assert.AreEqual(list.Last().Key, (int)ultimaDiaSemana);
+        }
     }
 }
