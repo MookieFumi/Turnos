@@ -4,7 +4,7 @@
     {
         Lunes=1,
         Martes,
-        Miecoles,
+        Miercoles,
         Jueves,
         Viernes,
         Sabado,

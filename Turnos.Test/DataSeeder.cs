@@ -15,7 +15,7 @@ namespace Turnos.Test
         {
             context.Empresas.Delete();
 
-            var empresa = new Empresa { PrimerDiaSemana = DiaSemana.Miecoles };
+            var empresa = new Empresa { PrimerDiaSemana = DiaSemana.Miercoles };
             var usuario = new Usuario { Nombre = "Miguel Angel Martín Hrdez", Empresa = empresa };
             context.Usuarios.Add(usuario);
             context.SaveChanges();
