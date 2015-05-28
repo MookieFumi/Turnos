@@ -5,9 +5,9 @@ using Turnos.Model.Entities;
 
 namespace Turnos.Model
 {
-    public class Utilities
+    public static class Utilities
     {
-        public static IEnumerable<KeyValuePair<int, string>> GetDiasSemanaOrdenados(int primerDiaSemana)
+        public static IEnumerable<KeyValuePair<int, string>> GetDiasSemanaOrdenados(DiaSemana primerDiaSemana)
         {
             var diasSemana = new Dictionary<int, string>();
             foreach (var value in Enum.GetValues(typeof(DiaSemana)))
@@ -15,11 +15,9 @@ namespace Turnos.Model
                 diasSemana.Add((int)value, value.ToString());
             }
 
-            IEnumerable<KeyValuePair<int, string>> keyValuePairs = diasSemana
-                .Where(p => p.Key >= primerDiaSemana)
-                .Union(diasSemana.Where(p => p.Key < primerDiaSemana));
-
-            return keyValuePairs;
+            return diasSemana
+                .Where(p => p.Key >= (int)primerDiaSemana)
+                .Union(diasSemana.Where(p => p.Key < (int)primerDiaSemana));
         }
     }
 }

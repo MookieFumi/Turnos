@@ -57,7 +57,7 @@ namespace Turnos.Services.DTO
 
             public override string ToString()
             {
-                IEnumerable<KeyValuePair<int, string>> diasSemana = Utilities.GetDiasSemanaOrdenados((int)PrimerDiaSemana);
+                IEnumerable<KeyValuePair<int, string>> diasSemana = Utilities.GetDiasSemanaOrdenados(PrimerDiaSemana);
                 return String.Format("Dia {0} ({1}) Turno: {2}.", Dia, diasSemana.ElementAt(Dia - 1), Turno);
             }
         }
